@@ -12,7 +12,7 @@
     <label for="content">my review:</label>
     <textarea id="content"></textarea>
     <br>
-    <button id="add">Submit</button>
+    <button onclick="addReview()">Submit</button>
 </div>
 
 <script>
@@ -29,7 +29,7 @@
                 body: JSON.stringify({title: title, content: content})
             }
         );
-        let data = await response.json();
+        let data=await response.json();
     }
 </script>
 </body>
