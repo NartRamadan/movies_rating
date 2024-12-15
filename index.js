@@ -4,6 +4,7 @@ const app = express();
 app.use(express.json());
 
 const bodyParser = require('body-parser');
+const path = require("path");
 app.use(bodyParser.urlencoded({extended: false}));
 
 let curr_id=1;
@@ -19,13 +20,17 @@ app.post("/Review",(req,res)=>{
     item.content = req.body.content;
     curr_id++;
     reviews.push(item);
+
+    console.log(reviews);
     res.status(200).json("ok");
 });
-
-app.get("/Review",(req,res)=>{
+app.get('/Review', (req, res) => {
     res.status(200).json(reviews);
-})
+});
 
+app.get('/', (req, res) => {
+    res.status(200).sendFile(path.join(__dirname,"/views/review_main.html"));
+});
 
 app.listen(port, () => {            //server starts listening for any attempts from a client to connect at port: {port}
     console.log(`Now listening on port http://localhost:${port}`);
