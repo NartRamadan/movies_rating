@@ -2,71 +2,57 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title> <!-- כותרת הדף -->
+    <title>Title</title>
 </head>
 <body>
-<!-- טופס להוספת ביקורת -->
 <div id="addingForm">
-    <label for="title">Movie Name:</label> <!-- תווית עבור השדה שם הסרט -->
-    <input type="text" id="title" /> <!-- שדה קלט לשם הסרט -->
+    <label for="title">שם הסרט:</label>
+    <input type="text" id="title" />
     <br>
-    <label for="content">My Review:</label> <!-- תווית עבור השדה תוכן הביקורת -->
-    <textarea id="content"></textarea> <!-- שדה טקסט לפסקה/ביקורת -->
+    <label for="content">הביקורת שלי:</label>
+    <textarea id="content"></textarea>
     <br>
-    <button onclick="AddReview();">הוספה</button> <!-- כפתור לשליחת הביקורת -->
+    <button onclick="AddReview();">הוספה</button>
 </div>
-
-<!-- תצוגת כל הביקורות -->
 <div id="AllReviews"></div>
 
 <script>
-    // מערך לשמירת כל הביקורות
     var AllReviews=[];
-
-    // פונקציה לקרוא את כל הביקורות
     async function getAllReviews(){
-        let url = "/Review"; // כתובת ה-API לטעינת הביקורות
-        let response = await fetch(url); // שליחת בקשה לשרת
-        let data = await response.json(); // המרת התגובה לפורמט JSON
-        AllReviews = data; // שמירת הביקורות במערך AllReviews
-        console.log("data was entered"); // הדפסת הודעת בדיקה לקונסול
-        ShowReviews(); // הצגת הביקורות
+        let url = "/Review";
+        let response = await fetch(url);
+        let data = await response.json();
+        AllReviews=data;
+        console.log("data was entered");
+        ShowReviews();
     }
-
-    // פונקציה להצגת כל הביקורות
     function ShowReviews(){
-        let s = ''; // משתנה לאחסון תוכן HTML להצגה
-        for (let rr of AllReviews) { // לולאת חזרה על כל הביקורות
-            s += `<div>`; // התחלת כל בלוק של ביקורת
-            s += `<b>${rr.title}</b><br>`; // הצגת שם הסרט
-            s += `${rr.content}`; // הצגת תוכן הביקורת
-            s += `</div>`; // סגירת הבלוק
+        let s='';
+        for(let rr of AllReviews){
+            s += `<div>`;
+            s += `<b>${rr.title}</b><br>`;
+            s += `${rr.content}`;
+            s += `</div>`;
         }
-        // עדכון ה-HTML של אלמנט ה-AllReviews
-        document.getElementById('AllReviews').innerHTML = s;
+        document.getElementById('AllReviews').innerHTML=s;
     }
-
-    // פונקציה להוספת ביקורת חדשה
     async function AddReview(){
-        let title = document.getElementById("title").value; // קבלת שם הסרט
-        let content = document.getElementById("content").value; // קבלת תוכן הביקורת
-        let url = "/Review"; // כתובת ה-API להוספת ביקורת
-
-        // שליחת בקשה לשרת להוספת ביקורת חדשה
-        let response = await fetch(url, {
-            method: 'POST', // בקשת POST
-            headers: {
-                'Content-Type': 'application/json' // קובעים שהתוכן יהיה בפורמט JSON
-            },
-            body: JSON.stringify({ title: title, content: content }) // שליחת המידע בפורמט JSON
-        });
-
-        let data = await response.json(); // המרת התגובה לפורמט JSON (לא בהכרח נעשה בו שימוש כאן)
+        let title   = document.getElementById("title").value;
+        let content = document.getElementById("content").value;
+        let url = "/Review";
+        let response=await fetch(url,
+            {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({title:title,content:content})
+            }
+        );
+        let data=await response.json();
+        getAllReviews();
     }
-
-    // קריאה לפונקציה getAllReviews בעת טעינת הדף כדי להציג את כל הביקורות
     getAllReviews();
 </script>
-
 </body>
 </html>
